@@ -1,3 +1,128 @@
 ERROR: (gcloud.app.deploy) Error Response: [9] Cloud build ead7b1a2-51c0-4c0f-abd2-cffcc73f630f status: FAILURE.
 Build error details: {"error":{"errorType":"BuildError","canonicalCode":"INVALID_ARGUMENT","errorId":"8EA070AF","errorMessage":"14 Sep 2019 18:26:10 INFO     Arguments: ['--parser_script=/usr/local/bin/ftl.par', '--src=', '--entrypoint=', '--name=us.gcr.io/biasengine-1568475790341/app-engine-tmp/app/ttl-2h:3cd60d26-62ea-4508-b175-e007343a94bc', '--directory=/workspace', '--destination=/srv', '--cache-repository=us.gcr.io/biasengine-1568475790341/app-engine-tmp/build-cache/ttl-7d', '--cache', '--builder-output-path=\"\"', '--additional-directory=/.googleconfig', '--python-cmd=/opt/python3.7/bin/python3.7', '--pip-cmd=/env/bin/python3.7 -m pip', '--venv-cmd=/opt/python3.7/bin/python3.7 -m venv /env', '-v=DEBUG', '--base=us.gcr.io/gae-runtimes/python37:python37_20190527_3_7_3_RC00']\n14 Sep 2019 18:26:10 INFO     Unparsed arguments: ['--name=us.gcr.io/biasengine-1568475790341/app-engine-tmp/app/ttl-2h:3cd60d26-62ea-4508-b175-e007343a94bc', '--directory=/workspace', '--destination=/srv', '--cache-repository=us.gcr.io/biasengine-1568475790341/app-engine-tmp/build-cache/ttl-7d', '--cache', '--builder-output-path=\"\"', '--additional-directory=/.googleconfig', '--python-cmd=/opt/python3.7/bin/python3.7', '--pip-cmd=/env/bin/python3.7 -m pip', '--venv-cmd=/opt/python3.7/bin/python3.7 -m venv /env', '-v=DEBUG', '--base=us.gcr.io/gae-runtimes/python37:python37_20190527_3_7_3_RC00']\n14 Sep 2019 18:26:10 WARNING  Failed to parse requirements.txt to check gunicorn version\nTraceback (most recent call last):\n  File \"/parse_workspace/build.py\", line 142, in main\n    requirements = parse_requirements_txt(open(requirements_txt_path).read())\n  File \"/usr/lib/python3.6/encodings/ascii.py\", line 26, in decode\n    return codecs.ascii_decode(input, self.errors)[0]\nUnicodeDecodeError: 'ascii' codec can't decode byte 0xff in position 0: ordinal not in range(128)\n14 Sep 2019 18:26:10 INFO     Executing ['/usr/local/bin/ftl.par', '--name=us.gcr.io/biasengine-1568475790341/app-engine-tmp/app/ttl-2h:3cd60d26-62ea-4508-b175-e007343a94bc', '--directory=/workspace', '--destination=/srv', '--cache-repository=us.gcr.io/biasengine-1568475790341/app-engine-tmp/build-cache/ttl-7d', '--cache', '--builder-output-path=\"\"', '--additional-directory=/.googleconfig', '--python-cmd=/opt/python3.7/bin/python3.7', '--pip-cmd=/env/bin/python3.7 -m pip', '--venv-cmd=/opt/python3.7/bin/python3.7 -m venv /env', '-v=DEBUG', '--base=us.gcr.io/gae-runtimes/python37:python37_20190527_3_7_3_RC00']\nINFO     FTL version python-v0.15.0\nINFO     Beginning FTL build for python\nINFO     FTL arg passed: virtualenv_dir /env\nINFO     FTL arg passed: ttl 168\nINFO     FTL arg passed: python_cmd /opt/python3.7/bin/python3.7\nINFO     FTL arg passed: cache True\nINFO     FTL arg passed: virtualenv_cmd virtualenv\nINFO     FTL arg passed: entrypoint None\nINFO     FTL arg passed: exposed_ports None\nINFO     FTL arg passed: pip_cmd /env/bin/python3.7 -m pip\nINFO     FTL arg passed: tar_base_image_path None\nINFO     FTL arg passed: builder_output_path \"\"\nINFO     FTL arg passed: destination_path /srv\nINFO     FTL arg passed: sh_c_prefix False\nINFO     FTL arg passed: base us.gcr.io/gae-runtimes/python37:python37_20190527_3_7_3_RC00\nINFO     FTL arg passed: cache_key_version v0.15.0\nINFO     FTL arg passed: cache_salt \nINFO     FTL arg passed: cache_repository us.gcr.io/biasengine-1568475790341/app-engine-tmp/build-cache/ttl-7d\nINFO     FTL arg passed: venv_cmd /opt/python3.7/bin/python3.7 -m venv /env\nINFO     FTL arg passed: name us.gcr.io/biasengine-1568475790341/app-engine-tmp/app/ttl-2h:3cd60d26-62ea-4508-b175-e007343a94bc\nINFO     FTL arg passed: global_cache False\nINFO     FTL arg passed: upload True\nINFO     FTL arg passed: fail_on_error True\nINFO     FTL arg passed: output_path None\nINFO     FTL arg passed: directory /workspace\nINFO     FTL arg passed: additional_directory /.googleconfig\nINFO     FTL arg passed: verbosity DEBUG\nINFO     starting: full build\nINFO     starting: builder initialization\nINFO     Loading Docker credentials for repository 'us.gcr.io/gae.
 Check the build log for errors: https://console.cloud.google.com/gcr/builds/ead7b1a2-51c0-4c0f-abd2-cffcc73f630f?project=1027641754013
+
+__________________________________________________________________________________________________________________________________
+
+###############################################
+
+from pydub import AudioSegment
+import io
+import os
+from google.cloud import speech
+from google.cloud.speech import enums
+from google.cloud.speech import types
+import wave
+from google.cloud import storage
+
+filepath = "C:/Users/aryan/Data/"
+output_filepath = "C:/Users/aryan/Data"
+bucketname = "callsaudiofiles"
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return '''
+    <html>
+    <h1>Hello World</h1>
+    <p>click <a href="/upload">HERE</a> to upload.</p>
+    </html>
+    '''
+
+@app.route('/upload')
+def upload_file():
+    # Remember to change audio/* to video/*
+    return '''
+    <html>
+   <body>
+      <form action = "http://localhost:5000/uploader" method = "POST" 
+         enctype = "multipart/form-data">
+         <input type =file name=file accept=audio/*> 
+         <input type = "submit"/>
+      </form>
+   </body>
+</html>
+'''
+
+@app.route('/uploader', methods = ['GET', 'POST'])
+def uploaded_file():
+    if request.method == 'POST':
+        f = request.files['file']
+        f.save(secure_filename(f.filename))
+        return f.filename + " uploaded succssfully!"
+
+#########################################
+
+def mp3_to_wav(audio_file):
+    if audio_file.split('.')[1] == "mp3":
+        sound = AudioSegment.from_mp3(audio_file)
+        audio_file = audio_file.split('.')[0] + '.wav'
+        print(audio_file)
+        sound.export(audio_file, format="wav")
+
+def stereo_to_mono(audio_file):
+    sound = AudioSegment.from_wav(audio_file)
+    sound = sound.set_channels(1)
+    sound.export(audio_file, format="wav")
+
+def frame_rate_channel(audio_file):
+    with wave.open(audio_file, "rb") as wave_file:
+        frame_rate = wave_file.getframerate()
+        channels = wave_file.getnchannels()
+        return frame_rate, channels
+
+def upload_blob(bucket_name, source_file_name, destination_blob_name):
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+
+    blob.upload_from_filename(source_file_name)
+
+def delete_blob(bucket_name, blob_name):
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket(bucket_name)
+    blob = bucket.blob(blob_name)
+
+    blob.delete()
+
+def google_transcribe(audio_file):
+    file_name = filepath + audio_file
+    mp3_to_wav(file_name)
+
+    frame_rate, channels = frame_rate_channel(file_name)
+
+    if channels> 1:
+        stereo_to_mono(file_name)
+
+    bucket_name = bucketname
+    source_file_name = filepath + audio_file
+    destination_blob_name = audio_file
+
+    upload_blob(bucket_name, source_file_name, destination_blob_name)
+
+    gcs_uri = 'gs://' + bucketname + '/' + audio_file
+    transcript = ''
+
+    client = speech.SpeechClient()
+    audio = types.RecognitionAudio(uri=gcs_uri)
+
+    config = types.RecognitionConfig(
+    encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
+    sample_rate_hertz=frame_rate,
+    language_code='en-US')
+
+    operation = client.long_running_recognize(config, audio)
+    response = operation.result(timeout=10000)
+
+    for result in response.results:
+        transcript += result.alternatives[0].transcript
+
+    delete_blob(bucket_name, destination_blob_name)
+    return transcript
+
+def write_transcript(transcript_filename, transcript):
+    f = open(output_filepath + transcript_filename,"w+")
+    f.write(transcript)
+    f.close()
+#######################################
