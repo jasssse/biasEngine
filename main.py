@@ -20,7 +20,7 @@ bucketname = "callsaudiofiles"
 app = Flask(__name__)
 
 @app.route('/')
-def hello_world():
+def index():
     return '''
     <html>
     <h1>Hello World</h1>
