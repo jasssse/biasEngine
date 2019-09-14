@@ -1,2 +1,2 @@
 # biasEngine
-Web app that analyzes news broadcast scripts for bias
+Web app that analyzes news broadcast scripts and predicts the broadcaster's political stance
